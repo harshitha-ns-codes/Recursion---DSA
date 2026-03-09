@@ -1,0 +1,62 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+void insert(stack<int>& s, int top1)
+{
+    if(s.empty() || s.top() <= top1)
+    {
+        s.push(top1);
+        return;
+    }
+
+    int top2 = s.top();
+    s.pop();
+
+    insert(s, top1);
+
+    s.push(top2);
+}
+
+void sortStack(stack<int>& s)
+{
+    if(s.size() <= 1)
+    {
+        return;
+    }
+
+    int top1 = s.top();
+    s.pop();
+
+    sortStack(s);
+
+    insert(s, top1);
+}
+
+int main()
+{
+    stack<int> s;
+    int n, x;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    cout << "Enter elements:\n";
+    for(int i = 0; i < n; i++)
+    {
+        cin >> x;
+        s.push(x);
+    }
+
+    sortStack(s);
+
+    cout << "Sorted Stack (top to bottom):\n";
+
+    while(!s.empty())
+    {
+        cout << s.top() << " ";
+        s.pop();
+    }
+
+    return 0;
+}
