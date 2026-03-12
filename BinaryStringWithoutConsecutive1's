@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void generate(int n , string s){
+  if(s.length() == n){
+    cout << s << endl;
+    return;
+}
+
+generate(n,s+"0");
+
+if(s.empty() || s.back() != "1"){
+  generate(n,s+"1");
+}
+}
+int main(){
+
+generate(2," ");
+}
