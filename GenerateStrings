@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve(string s, int index, string output) {
+    
+    if(index == s.length()) {
+        cout << output << endl;
+        return;
+    }
+
+    // Exclude character
+    solve(s, index + 1, output);
+
+    // Include character
+    output.push_back(s[index]);
+    solve(s, index + 1, output);
+}
+
+int main() {
+
+    string s = "abc";
+    solve(s, 0, "");
+
+}
