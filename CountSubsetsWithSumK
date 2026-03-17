@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool PrintS(int ind,  int s, int sum, int arr[], int n){
+
+    if(ind == n){
+        if(s == sum){
+            return 1;
+            }
+            return 0;
+        }
+        
+    }
+
+    // pick the element
+    ds.push_back(arr[ind]);
+    s += arr[ind];
+
+    int l = PrintS(ind + 1,  s, sum, arr, n);
+
+    // undo the pick
+    s -= arr[ind];
+    ds.pop_back();
+
+    // not pick
+    int r = PrintS(ind + 1,  s, sum, arr, n);
+
+    return l+r;
+}
+
+int main(){
+
+    int arr[] = {1,2,1};
+    int n = 3;
+    int sum = 2;
+
+    
+
+    PrintS(0,  0, sum, arr, n);
+
+    return 0;
+}
