@@ -1,0 +1,22 @@
+bool isSafe(int row, int col, vector<string>& board, int n){
+    int r = row, c = col;
+
+    while(col >= 0){
+        if(board[row][col] == 'Q') return false;
+        col--;
+    }
+
+    row = r, col = c;
+    while(row >= 0 && col >= 0){
+        if(board[row][col] == 'Q') return false;
+        row--; col--;
+    }
+
+    row = r, col = c;
+    while(row < n && col >= 0){
+        if(board[row][col] == 'Q') return false;
+        row++; col--;
+    }
+
+    return true;
+}
