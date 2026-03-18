@@ -1,4 +1,4 @@
-// basics of recursion 
+// From 1 to n basics of recursion 
 
 #include<iostream>
 using namespace std;
