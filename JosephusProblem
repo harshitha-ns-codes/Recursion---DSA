@@ -1,0 +1,7 @@
+def josephus(n, k):
+    if n == 1:
+        return 0
+    return (josephus(n - 1, k) + k) % n
+
+# +1 because index starts from 0
+print(josephus(5, 2) + 1)
