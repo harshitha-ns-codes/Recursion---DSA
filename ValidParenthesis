@@ -1,0 +1,23 @@
+def generate_parentheses(n, d):
+    result = []
+
+    def backtrack(s, open_count, close_count, depth):
+        # Base case
+        if len(s) == 2 * n:
+            result.append(s)
+            return
+
+        # Add '(' if possible
+        if open_count < n and depth < d:
+            backtrack(s + "(", open_count + 1, close_count, depth + 1)
+
+        # Add ')' if valid
+        if close_count < open_count:
+            backtrack(s + ")", open_count, close_count + 1, depth - 1)
+
+    backtrack("", 0, 0, 0)
+    return result
+
+
+# Test
+print(generate_parentheses(3, 2))
