@@ -1,0 +1,27 @@
+def is_unique(arr, index, i=0):
+    # Base case: checked entire array
+    if i == len(arr):
+        return True
+    
+    # Skip checking same index
+    if i != index and arr[i] == arr[index]:
+        return False
+    
+    return is_unique(arr, index, i + 1)
+
+
+def sum_unique(arr, index=0):
+    # Base case: reached end
+    if index == len(arr):
+        return 0
+    
+    # Check if current element is unique
+    if is_unique(arr, index):
+        return arr[index] + sum_unique(arr, index + 1)
+    else:
+        return sum_unique(arr, index + 1)
+
+
+# Example
+arr = [1, 2, 2, 3, 4, 4, 5]
+print(sum_unique(arr))  # Output: 9
