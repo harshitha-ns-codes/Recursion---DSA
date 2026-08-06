@@ -1,0 +1,44 @@
+class Solution {
+private:
+bool detect(int src , vector<int>adjLs[] , vector<int>&vis)
+{
+    vis[src]=1;
+    queue<pair<int,int>>q;
+    q.push({src,-1});
+    while(!q.empty())
+    {
+        int node = q.front().first;
+        int parent = q.front().second;
+        q.pop();
+        for(auto it : adjLs[node])
+        {
+            if(vis[it] ==0)
+            {
+                vis[it]=1;
+                q.push({it,node});
+            }
+            else if(parent != it)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+public:
+bool isCycle(int V , vector<int>adjLs[])
+{
+    vector<int>vis(V,0);
+    for(int i=0;i<V;i++)
+    {
+        if(vis[i] == 0)
+        {
+            if(detect(i,adjLs,vis))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+};
