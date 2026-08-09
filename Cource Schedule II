@@ -1,0 +1,48 @@
+class Solution {
+private:
+bool dfs(int node ,vector<vector<int>>&adjLs, vector<int>&vis,vector<int>&PathVis , vector<int>& topo)
+{
+    vis[node]=1;
+    PathVis[node]=1;
+    for(auto it : adjLs[node])
+    {
+        if(vis[it]==0)
+        {
+            if(dfs(it,adjLs,vis,PathVis,topo)==true) return true;
+        }
+        else if(PathVis[it] == 1)
+        {
+            return true;
+        }
+    }
+    PathVis[node] = 0;
+    topo.push_back(node);
+    return false;
+}
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        vector<vector<int>>adjLs(numCourses);
+        vector<int>vis(numCourses,0);
+        vector<int>PathVis(numCourses,0);
+        vector<int>topo;
+        for(auto it : prerequisites)
+{
+    adjLs[it[1]].push_back(it[0]);
+}
+        for(int i=0;i<numCourses;i++)
+        {
+            if(vis[i] == 0)
+            {
+                if(dfs(i,adjLs,vis,PathVis,topo)==true)
+                {
+                    return {};
+                }
+            }
+        }
+        reverse(topo.begin(), topo.end());
+        return topo;
+
+        
+    }
+};
