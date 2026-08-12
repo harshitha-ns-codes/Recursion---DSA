@@ -1,0 +1,58 @@
+class Solution {
+private:
+void topoSort(int node , vector<pair<int,int>>adjLs[],vector<int>&vis, stack<int>&st)
+{
+    vis[node]=1;
+    for(auto it : adjLs[node])
+    {
+        int v = it.first();
+        if(vis[v] == 0)
+        {
+            topoSort(v,adjLs,vis,st);
+        }
+    }
+    st.push(node);
+}
+public:
+vector<int> shortestPath(vector<vector<int>>& edges, int N, int M)
+{
+    vector<pair<int,int>>adjLs[N];
+    for(int i=0;i<M;i++)
+    {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int wt = edges[i][2];
+        adjLs[u].push_back({v,wt});
+    }
+
+    vector<int>vis(N,0);
+    stack<int>st;
+    for(int i=0;i<N;i++)
+    {
+        if(vis[i] == 0)
+        {
+            topoSort(i,adjLs,vis,st);
+        }
+    
+    }
+    vector<int>dist(N,1e9);
+    dist[0]=0;
+    while(!st.empty())
+    {
+        int node = st.top();
+        st.pop();
+
+        for(auto it : adjLs[node])
+        {
+            int v = it.first();
+            int wt = it.second();
+            if(dist[node]+wt < dist[v])
+            {
+                dist[v]=dist[node]+wt;
+            }
+        }
+    }
+    return dist;
+    
+}
+};
