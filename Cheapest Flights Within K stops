@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) 
+    {
+        vector<pair <int , int>>adjLs[n];
+        for(auto it : flights)
+        {
+            adjLs[it[0]].push_back({it[1],it[2]});
+        }
+        queue<pair<int,pair<int,int>>>q;
+        
+        vector<int>dist(n,1e9);
+        dist[src]=0;
+        q.push({0,{src,0}});
+        while(!q.empty())
+        {
+            auto it = q.front();
+            q.pop();
+            int steps = it.first;
+            int node = it.second.first;
+            int cost = it.second.second;
+            
+            if(steps > k) continue;
+
+            for(auto iter : adjLs[node])
+            {
+                int adjNode = iter.first;
+                int EdgeCost = iter.second;
+                if(cost + EdgeCost < dist[adjNode] && steps <= k)
+                {
+                    dist[adjNode] = cost + EdgeCost;
+                    q.push({steps+1,{adjNode,cost+EdgeCost}});
+
+                }
+            }
+        }
+        if(dist[dst] == 1e9) return -1;
+        return dist[dst];
+        
+    }
+};
