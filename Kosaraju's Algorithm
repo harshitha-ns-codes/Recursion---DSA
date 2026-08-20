@@ -1,0 +1,85 @@
+class Solution {
+private:
+
+    // Step 1: DFS and store nodes after finishing
+    void dfs1(int node, vector<int> adj[],
+              vector<int>& vis, stack<int>& st) {
+
+        vis[node] = 1;
+
+        for (auto it : adj[node]) {
+            if (!vis[it]) {
+                dfs1(it, adj, vis, st);
+            }
+        }
+
+        // Push after all neighbours are processed
+        st.push(node);
+    }
+
+
+    // Step 3: DFS on reversed graph
+    void dfs2(int node, vector<int> adjRev[],
+              vector<int>& vis) {
+
+        vis[node] = 1;
+
+        for (auto it : adjRev[node]) {
+            if (!vis[it]) {
+                dfs2(it, adjRev, vis);
+            }
+        }
+    }
+
+
+public:
+    int kosaraju(int V, vector<int> adj[]) {
+
+        vector<int> vis(V, 0);
+        stack<int> st;
+
+        // ---------------- STEP 1 ----------------
+        // DFS + store nodes according to finishing time
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs1(i, adj, vis, st);
+            }
+        }
+
+
+        // ---------------- STEP 2 ----------------
+        // Reverse the graph
+        vector<int> adjRev[V];
+
+        for (int i = 0; i < V; i++) {
+            vis[i] = 0;
+
+            for (auto it : adj[i]) {
+
+                // Reverse i -> it
+                // into it -> i
+                adjRev[it].push_back(i);
+            }
+        }
+
+
+        // ---------------- STEP 3 ----------------
+        // DFS according to stack order
+        int scc = 0;
+
+        while (!st.empty()) {
+
+            int node = st.top();
+            st.pop();
+
+            if (!vis[node]) {
+
+                scc++;
+
+                dfs2(node, adjRev, vis);
+            }
+        }
+
+        return scc;
+    }
+};
