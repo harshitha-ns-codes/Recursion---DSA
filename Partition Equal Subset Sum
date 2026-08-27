@@ -1,0 +1,146 @@
+//Memoization
+class Solution {
+private:
+bool f(int ind , int target , vector<int>&nums,vector<vector<int>>&dp)
+{
+    if(target == 0) return true;
+    if(ind == 0) return nums[0]==target;
+    if(dp[ind][target] != -1) return dp[ind][target];
+    int notTaken = f(ind-1,target,nums,dp);
+    int taken=false;
+    if(target >= nums[ind]){
+        taken = f(ind-1,target-nums[ind],nums,dp);
+    }
+    return dp[ind][target]=taken||notTaken;
+}
+public:
+    bool canPartition(vector<int>& nums) 
+    {
+        int totSum = 0;
+        for(int i=0;i<nums.size();i++){
+            totSum += nums[i];
+        }
+        if(totSum % 2) return false;
+        int k = totSum/2;
+       vector<vector<int>>dp(nums.size(),vector<int>(k+1,-1)); 
+       return f(nums.size()-1,k,nums,dp);
+
+        
+    }
+};
+
+//Tabulation
+class Solution {
+public:
+    bool canPartition(vector<int>& nums)
+    {
+        int n = nums.size();
+
+        int totSum = 0;
+        for(int x : nums)
+            totSum += x;
+
+        // If total is odd, equal partition is impossible
+        if(totSum % 2 != 0)
+            return false;
+
+        int k = totSum / 2;
+
+        vector<vector<bool>> dp(
+            n,
+            vector<bool>(k + 1, false)
+        );
+
+        // Target 0 is always possible
+        for(int ind = 0; ind < n; ind++)
+        {
+            dp[ind][0] = true;
+        }
+
+        // First element
+        if(nums[0] <= k)
+        {
+            dp[0][nums[0]] = true;
+        }
+
+        // Fill the table
+        for(int ind = 1; ind < n; ind++)
+        {
+            for(int target = 1; target <= k; target++)
+            {
+                // Don't take nums[ind]
+                bool notTaken = dp[ind - 1][target];
+
+                // Take nums[ind]
+                bool taken = false;
+
+                if(nums[ind] <= target)
+                {
+                    taken = dp[ind - 1][target - nums[ind]];
+                }
+
+                dp[ind][target] = taken || notTaken;
+            }
+        }
+
+        return dp[n - 1][k];
+    }
+};
+
+//Space Optimization
+class Solution {
+public:
+    bool canPartition(vector<int>& nums)
+    {
+        int n = nums.size();
+
+        int totSum = 0;
+        for(int x : nums)
+            totSum += x;
+
+        // Odd total cannot be divided equally
+        if(totSum % 2 != 0)
+            return false;
+
+        int k = totSum / 2;
+
+        vector<bool> prev(k + 1, false);
+        vector<bool> curr(k + 1, false);
+
+        // Target 0 is always possible
+        prev[0] = true;
+
+        // First element
+        if(nums[0] <= k)
+        {
+            prev[nums[0]] = true;
+        }
+
+        // Process remaining elements
+        for(int ind = 1; ind < n; ind++)
+        {
+            curr[0] = true;
+
+            for(int target = 1; target <= k; target++)
+            {
+                // Don't take
+                bool notTaken = prev[target];
+
+                // Take
+                bool taken = false;
+
+                if(nums[ind] <= target)
+                {
+                    taken = prev[target - nums[ind]];
+                }
+
+                curr[target] = taken || notTaken;
+            }
+
+            // Current row becomes previous row
+            prev = curr;
+        }
+
+        return prev[k];
+    }
+};
